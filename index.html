@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSpace - E-Learning Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>EduSpace</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-page="dashboard"><i class="fa-solid fa-house"></i> Dashboard</li>
+                <li data-page="tasks"><i class="fa-solid fa-list-check"></i> Tasks</li>
+                <li data-page="planner"><i class="fa-solid fa-calendar-days"></i> Study Planner</li>
+                <li data-page="analytics"><i class="fa-solid fa-chart-pie"></i> Analytics</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="theme-btn">
+                    <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h2 id="page-title">Dashboard Overview</h2>
+                    <p>Welcome back, Student! Ready to learn today?</p>
+                </div>
+                <div class="user-profile">
+                    <i class="fa-regular fa-bell notification-icon"></i>
+                    <div class="avatar">JS</div>
+                </div>
+            </header>
+
+            <!-- Page 1: Dashboard -->
+            <section id="page-dashboard" class="page-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-blue"><i class="fa-solid fa-list"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-total">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-green"><i class="fa-solid fa-check"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-completed">0</h3>
+                            <p>Completed Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-orange"><i class="fa-solid fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-pending">0</h3>
+                            <p>Pending Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-purple"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-progress">0%</h3>
+                            <p>Overall Progress</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>Recent Tasks</h3>
+                        <div id="dashboard-task-preview" class="task-preview-list"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Study Hours Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="dashboardChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 2: Tasks -->
+            <section id="page-tasks" class="page-section">
+                <div class="card">
+                    <div class="toolbar">
+                        <div class="filters">
+                            <select id="filter-status">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            <select id="filter-priority">
+                                <option value="all">All Priorities</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <button id="open-task-modal" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add New Task</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Task Title</th>
+                                    <th>Subject</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="task-table-body">
+                                <!-- Dynamic rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 3: Study Planner -->
+            <section id="page-planner" class="page-section">
+                <div class="planner-layout">
+                    <div class="card calendar-card">
+                        <h3>Calendar View</h3>
+                        <div class="calendar-header">
+                            <button id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                            <h4 id="month-year-display">October 2026</h4>
+                            <button id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar-grid" id="calendar-days">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                    <div class="card schedule-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3 id="selected-date-title" style="margin-bottom: 0;">Study Sessions</h3>
+                            <button id="open-session-modal" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-plus"></i> Add Session</button>
+                        </div>
+                        <div id="study-sessions-list" class="session-list">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 4: Analytics -->
+            <section id="page-analytics" class="page-section">
+                <div class="analytics-grid">
+                    <div class="card">
+                        <h3>Task Priority Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="priorityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Weekly Study Hours</h3>
+                        <div class="chart-container">
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h3 id="modal-title">Add New Task</h3>
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" id="task-title-input" required placeholder="e.g., Complete Mathematics Assignment">
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="task-subject-input" required placeholder="e.g., Mathematics">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="task-priority-input">
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date</label>
+                        <input type="date" id="task-date-input" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Session Modal -->
+    <div id="session-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-session-modal" class="close">&times;</span>
+            <h3>Add Study Session</h3>
+            <form id="session-form">
+                <div class="form-group">
+                    <label>Time / Slot</label>
+                    <input type="text" id="session-time-input" required placeholder="e.g., 09:00 AM - 11:00 AM">
+                </div>
+                <div class="form-group">
+                    <label>Topic / Subject</label>
+                    <input type="text" id="session-topic-input" required placeholder="e.g., Calculus Problem Solving">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Session</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
