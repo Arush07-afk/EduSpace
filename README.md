@@ -1,10 +1,6 @@
 # 🎓 EduSphere - E-Learning & Study Management Dashboard
 
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop" alt="EduSphere Banner" width="100%" style="border-radius: 8px;">
-</p>
-
-<p align="center">
   <em>A modern, responsive e-learning dashboard and study management web application inspired by clean Dribbble UI aesthetics. Built with pure HTML5, vanilla CSS3, and JavaScript—no heavy frameworks required!</em>
 </p>
 
